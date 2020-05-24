@@ -36,4 +36,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //Relationships
+    public function messages():object {
+        return $this->hasMany(Message::class);
+    }
 }
