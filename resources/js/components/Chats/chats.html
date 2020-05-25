@@ -31,8 +31,8 @@
             <div class="card-header">Active Users</div>
             <div class="card-body">
                 <ul>
-                    <li class="py-2">
-                        Mr. X
+                    <li class="py-2" v-for="(user,index) in users" :key="index">
+                        {{user.name}}
                     </li>
                 </ul>
             </div>
