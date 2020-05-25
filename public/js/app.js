@@ -1926,21 +1926,40 @@ axios = window.axios;
   data() {
     return {
       allMessages: [],
-      newMessage: ''
+      newMessage: '',
+      users: [],
+      typingUser: false,
+      typingTimer: false
     };
   },
 
   created() {
     //to get all message to prepare it in chat on created vm object
     this.getMessages();
+  },
+
+  mounted() {
     let vm = this; //todo:to get message is broadcast now on channel chats and update chat view
     //todo:this will happen after save message when broadcast message is share on channel and fire event
+    //todo:here you listen on firing specific event attached on channel 'chats'
+    //todo:may be many events attached on channel
 
-    window.Echo.join('chats').listen('SendMessageEvent', event => {
+    window.Echo.join('chats').listen('SendMessageEvent', e => {
       //debugger;
-      alert(event.message);
-      vm.allMessages.push(event.message);
-    });
+      alert(e.message);
+      vm.allMessages.push(e.message);
+    }); //     .here(user => {
+    //         vm.users = user;
+    //     })
+    //     .joining(user => {
+    //         vm.users.push(user);
+    //     })
+    //     .listenForWhisper('typing', user => {
+    //         vm.typingUser = user;
+    //     })
+    //     .leaving(user => {
+    //     vm.users = vm.users.filter(u => u.id != user.id);
+    // });
   },
 
   methods: {
@@ -1968,6 +1987,11 @@ axios = window.axios;
         console.log(response.data);
       });
       this.newMessage = '';
+    },
+
+    getTypingEvent() {
+      let vm = this;
+      window.Echo.join('chats').whisper('typing', vm.user);
     }
 
   }
@@ -48245,6 +48269,7 @@ var render = function() {
                 }
                 return _vm.saveMessage($event)
               },
+              keydown: _vm.getTypingEvent,
               input: function($event) {
                 if ($event.target.composing) {
                   return
@@ -48256,9 +48281,11 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("span", { staticClass: "text-muted" }, [
-        _vm._v("One User is typing...")
-      ])
+      _vm.typingUser
+        ? _c("span", { staticClass: "text-muted" }, [
+            _vm._v(_vm._s(_vm.typingUser.name) + " is typing...")
+          ])
+        : _vm._e()
     ]),
     _vm._v(" "),
     _vm._m(0)
@@ -60729,11 +60756,13 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   key: 'anyKey',
   wsHost: window.location.hostname,
   wsPort: 6001,
-  disableStats: true
+  disableStats: true,
+  encrypted: false
 }); //
-// window.Echo.channel('MyChannel').listen('EventWebSocketMessage', (e) => {
-//     console.log(e);
-// });
+
+window.Echo.channel('MyChannel').listen('EventWebSocketMessage', function (e) {
+  console.log(e);
+});
 
 /***/ }),
 

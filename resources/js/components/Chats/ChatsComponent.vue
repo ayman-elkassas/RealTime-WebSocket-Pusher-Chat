@@ -19,12 +19,16 @@
             return{
                 allMessages:[],
                 newMessage:'',
+                users:[],
+                typingUser:false,
+                typingTimer: false
             }
         },
         created() {
             //to get all message to prepare it in chat on created vm object
             this.getMessages();
-
+        },
+        mounted(){
             let vm=this;
 
             //todo:to get message is broadcast now on channel chats and update chat view
@@ -32,12 +36,23 @@
             //todo:here you listen on firing specific event attached on channel 'chats'
             //todo:may be many events attached on channel
             window.Echo.join('chats')
-                .listen('SendMessageEvent', (event) => {
-                //debugger;
-                alert(event.message);
-                vm.allMessages.push(event.message);
-            });
-
+                .listen('SendMessageEvent', (e) => {
+                    //debugger;
+                    alert(e.message);
+                    vm.allMessages.push(e.message);
+                })
+            //     .here(user => {
+            //         vm.users = user;
+            //     })
+            //     .joining(user => {
+            //         vm.users.push(user);
+            //     })
+            //     .listenForWhisper('typing', user => {
+            //         vm.typingUser = user;
+            //     })
+            //     .leaving(user => {
+            //     vm.users = vm.users.filter(u => u.id != user.id);
+            // });
         },
         methods:{
             getMessages(){
@@ -64,6 +79,11 @@
 
                 this.newMessage = '';
             },
+            getTypingEvent(){
+                let vm=this;
+                window.Echo.join('chats')
+                    .whisper('typing',vm.user);
+            }
         }
     }
 </script>

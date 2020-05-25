@@ -39,8 +39,9 @@ window.Echo = new Echo({
     wsHost: window.location.hostname,
     wsPort: 6001,
     disableStats: true,
+    encrypted:false
 });
 //
-// window.Echo.channel('MyChannel').listen('EventWebSocketMessage', (e) => {
-//     console.log(e);
-// });
+window.Echo.channel('MyChannel').listen('EventWebSocketMessage', (e) => {
+    console.log(e);
+});
