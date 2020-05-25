@@ -25,6 +25,11 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 //to register your channel until every one can listen on channel and receive call trigger back
 //when event on this channel firing
 
+//Must*************************************************************
+//Important thing to active private and presence channels uncomment
+//App\Providers\BroadcastServiceProvider::class,
+//in config/app.php
+
 //PRESENCE CHANNEL IS A PRIVATE CHANNEL
 Broadcast::channel('chats', function ($user){
     //should handle code to verify user want to subscribe and begin listen

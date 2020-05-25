@@ -41,7 +41,7 @@ window.Echo = new Echo({
     disableStats: true,
     encrypted:false
 });
-//
-window.Echo.channel('MyChannel').listen('EventWebSocketMessage', (e) => {
-    console.log(e);
-});
+//TODO:Simple using public channel as test........
+//window.Echo.channel('MyChannel').listen('EventWebSocketMessage', (e) => {
+//     console.log(e);
+// });
